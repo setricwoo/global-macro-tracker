@@ -1334,33 +1334,29 @@ body {
    响应式设计
    ======================================== */
 @media (max-width: 1400px) {
-    .country-module {
-        padding: 6px 10px;
-        min-width: 90px;
+    .map-legend {
+        flex-wrap: wrap;
+        gap: 12px;
     }
 
-    .country-name {
-        font-size: 10px;
-    }
-
-    .event-name {
-        font-size: 9px;
+    .legend-item {
+        font-size: 11px;
     }
 }
 
 @media (max-width: 1200px) {
     .main-content {
-        padding: 12px;
-        gap: 12px;
+        padding: 10px;
+        gap: 10px;
     }
 
     .filter-panel {
-        width: 200px;
+        width: 220px;
         padding: 12px;
     }
 
     .timeline-panel {
-        width: 240px;
+        width: 260px;
         padding: 12px;
     }
 
@@ -1368,32 +1364,62 @@ body {
         display: none;
     }
 
-    .country-event-modules {
-        display: none;
+    .map-legend {
+        padding: 10px 14px;
     }
 }
 
 @media (max-width: 992px) {
     .main-content {
         flex-direction: column;
+        height: auto;
+        min-height: 100vh;
     }
 
     .filter-panel,
     .timeline-panel {
         width: 100%;
         max-height: none;
+        height: auto;
+    }
+
+    .filter-panel {
+        order: 2;
     }
 
     .map-container {
-        min-height: 400px;
+        order: 1;
+        min-height: 350px;
+        height: 50vh;
+    }
+
+    .timeline-panel {
+        order: 3;
+        max-height: 300px;
     }
 
     .nav-links {
         display: none;
     }
+
+    .header-right .update-time {
+        display: none;
+    }
+
+    .map-wrapper {
+        min-height: 300px;
+    }
+
+    .world-map {
+        min-height: 300px;
+    }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 0;
+    }
+
     .header-content {
         padding: 0 12px;
     }
@@ -1402,10 +1428,176 @@ body {
         font-size: 14px;
     }
 
+    .logo-icon {
+        font-size: 18px;
+    }
+
+    .filter-panel {
+        padding: 10px;
+    }
+
+    .panel-title {
+        font-size: 13px;
+    }
+
+    .map-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .map-title {
+        font-size: 14px;
+    }
+
+    .map-controls {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .map-legend {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .legend-item {
+        font-size: 10px;
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .map-container {
+        min-height: 280px;
+        height: 45vh;
+    }
+
+    /* Leaflet 移动端优化 */
+    .leaflet-control-zoom a {
+        width: 28px !important;
+        height: 28px !important;
+        line-height: 28px !important;
+    }
+
+    .custom-marker .marker-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .custom-marker .marker-icon.high {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-content {
+        padding: 0 10px;
+    }
+
+    .logo-text {
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .filter-panel {
+        padding: 10px;
+    }
+
+    .panel-title {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .checkbox-item {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .map-container {
+        min-height: 250px;
+        height: 40vh;
+    }
+
+    .map-title {
+        font-size: 13px;
+    }
+
+    .map-legend {
+        display: none;
+    }
+
+    .timeline-panel {
+        max-height: 250px;
+        padding: 10px;
+    }
+
+    .timeline-item {
+        padding: 10px;
+    }
+
+    .timeline-date {
+        font-size: 10px;
+    }
+
+    .timeline-title {
+        font-size: 12px;
+    }
+
+    /* 弹窗移动端优化 */
     .modal {
         width: 98%;
         max-height: 95vh;
         border-radius: 12px;
+        margin: 10px auto;
+    }
+
+    .modal-header {
+        padding: 14px;
+    }
+
+    .modal-title {
+        font-size: 16px;
+    }
+
+    .modal-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .modal-tabs {
+        overflow-x: auto;
+        padding: 0 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+        padding: 10px 12px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .modal-body {
+        padding: 14px;
+    }
+
+    .modal-section h3 {
+        font-size: 13px;
     }
 
     .impact-grid,
@@ -1413,15 +1605,75 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .modal-tabs {
-        overflow-x: auto;
-        padding: 0 12px;
+    .impact-item {
+        padding: 10px;
     }
 
-    .tab-btn {
-        padding: 12px 14px;
+    /* Leaflet 弹窗移动端 */
+    .leaflet-popup-content {
+        min-width: 160px;
+    }
+
+    .map-popup {
+        padding: 10px 12px;
+    }
+
+    .map-popup-title {
         font-size: 12px;
-        white-space: nowrap;
+    }
+
+    .map-popup-meta {
+        font-size: 10px;
+    }
+
+    .map-popup-btn {
+        padding: 6px;
+        font-size: 11px;
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    .checkbox-item:hover,
+    .timeline-item:hover {
+        transform: none;
+        background: var(--bg-primary);
+    }
+
+    .control-btn:hover {
+        background: var(--bg-secondary);
+    }
+
+    .custom-marker:hover {
+        transform: none;
+    }
+
+    /* 增大触摸目标 */
+    .checkbox-item,
+    .timeline-item,
+    .control-btn,
+    .tab-btn {
+        min-height: 44px;
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-width: 896px) and (orientation: landscape) {
+    .main-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .map-container {
+        width: 100%;
+        height: 60vh;
+        order: 1;
+    }
+
+    .filter-panel,
+    .timeline-panel {
+        width: 50%;
+        order: 2;
     }
 }
 
