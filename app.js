@@ -2,66 +2,143 @@
 // 全局变量
 // ========================================
 let currentEvents = [...eventsData];
-let mapScale = 1;
+let map = null;  // Leaflet 地图实例
+let markers = []; // Leaflet 标记数组
 let currentEventId = null;
 let currentTab = 'overview';
 
 // ========================================
 // DOM 元素
 // ========================================
-const eventMarkersContainer = document.getElementById('eventMarkers');
 const timelineContainer = document.getElementById('timeline');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalClose = document.getElementById('modalClose');
 const checkboxes = document.querySelectorAll('.filter-options input[type="checkbox"]');
 const weeklyFocusList = document.getElementById('weeklyFocusList');
-const countryModulesContainer = document.getElementById('countryModules');
 
 // ========================================
 // 初始化
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    initEventMarkers();
+    initMap();
     initTimeline();
     initEventListeners();
     updateStats();
     initWeeklyFocus();
-    initCountryModules();
 });
 
 // ========================================
-// 事件标记初始化
+// Leaflet 地图初始化 - 类似CFR风格
 // ========================================
-function initEventMarkers() {
-    eventMarkersContainer.innerHTML = '';
+function initMap() {
+    // 创建地图实例，使用类似CFR的地图样式
+    map = L.map('worldMap', {
+        center: [20, 0],
+        zoom: 2,
+        minZoom: 1,
+        maxZoom: 8,
+        zoomControl: true,
+        attributionControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true
+    });
+
+    // 添加地图图层 - 使用CartoDB Positron样式（类似CFR的简洁风格）
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    // 添加事件标记
+    addEventMarkers();
+
+    // 绑定地图控制按钮
+    document.getElementById('zoomIn').addEventListener('click', () => map.zoomIn());
+    document.getElementById('zoomOut').addEventListener('click', () => map.zoomOut());
+    document.getElementById('resetView').addEventListener('click', () => map.setView([20, 0], 2));
+}
+
+// 将 x/y 百分比坐标转换为经纬度
+function coordinatesToLatLng(x, y) {
+    // x: 0-100% -> -180 to 180 (经度)
+    // y: 0-100% -> 90 to -90 (纬度)
+    const lng = (x / 100) * 360 - 180;
+    const lat = 90 - (y / 100) * 180;
+    return [lat, lng];
+}
+
+// 添加事件标记到地图
+function addEventMarkers() {
+    // 清除现有标记
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
 
     currentEvents.forEach(event => {
-        const marker = createEventMarker(event);
-        eventMarkersContainer.appendChild(marker);
+        const [lat, lng] = coordinatesToLatLng(event.coordinates.x, event.coordinates.y);
+        const marker = createLeafletMarker(event, lat, lng);
+        markers.push(marker);
     });
 }
 
-function createEventMarker(event) {
-    const marker = document.createElement('div');
-    marker.className = 'event-marker';
-    marker.style.left = `${event.coordinates.x}%`;
-    marker.style.top = `${event.coordinates.y}%`;
-    marker.dataset.eventId = event.id;
+// 创建 Leaflet 标记
+function createLeafletMarker(event, lat, lng) {
+    const typeInfo = eventTypeMap[event.type] || { name: '其他', color: '#64748b', icon: '📍' };
 
-    const dot = document.createElement('div');
-    dot.className = `marker-dot ${event.type} importance-${event.importance}`;
-    dot.style.color = eventTypeMap[event.type].color;
+    // 根据重要程度调整大小
+    const sizeClass = event.importance === 'high' ? 'high' : event.importance === 'low' ? 'low' : '';
 
-    const label = document.createElement('div');
-    label.className = 'event-label';
-    label.textContent = event.title;
+    // 创建自定义图标
+    const iconHtml = `
+        <div class="custom-marker">
+            <div class="marker-icon ${event.type} ${sizeClass}">
+                ${typeInfo.icon}
+            </div>
+        </div>
+    `;
 
-    marker.appendChild(dot);
-    marker.appendChild(label);
+    const customIcon = L.divIcon({
+        html: iconHtml,
+        className: '',
+        iconSize: event.importance === 'high' ? [32, 32] : event.importance === 'low' ? [24, 24] : [28, 28],
+        iconAnchor: event.importance === 'high' ? [16, 16] : event.importance === 'low' ? [12, 12] : [14, 14]
+    });
 
-    marker.addEventListener('click', () => openEventModal(event));
+    // 创建标记
+    const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+    // 创建弹出框内容
+    const popupContent = `
+        <div class="map-popup">
+            <div class="map-popup-title">${event.title}</div>
+            <div class="map-popup-meta">
+                📍 ${event.location}
+                ${event.date ? `<br>📅 ${event.date}` : ''}
+            </div>
+            <span class="map-popup-type ${event.type}">${typeInfo.name}</span>
+            <button class="map-popup-btn" onclick="openEventModal(eventsData.find(e => e.id === ${event.id}))">
+                查看详情
+            </button>
+        </div>
+    `;
+
+    marker.bindPopup(popupContent, {
+        maxWidth: 280,
+        className: 'custom-popup'
+    });
+
+    // 点击标记时打开详情
+    marker.on('click', function() {
+        currentEventId = event.id;
+    });
 
     return marker;
+}
+
+// 过滤并更新地图标记
+function updateMapMarkers() {
+    addEventMarkers();
 }
 
 // ========================================
@@ -181,63 +258,6 @@ function createFocusItem(event, isGeopolitical) {
     item.addEventListener('click', () => openEventModal(event));
 
     return item;
-}
-
-// ========================================
-// 国家事件小模块
-// ========================================
-function initCountryModules() {
-    countryModulesContainer.innerHTML = '';
-
-    const countries = ['美国', '中国', '欧元区', '日本', '俄罗斯', '乌克兰'];
-
-    countries.forEach(country => {
-        const countryEvents = currentEvents.filter(e =>
-            e.country === country || e.country.includes(country) ||
-            (country === '欧元区' && (e.country === '德国' || e.country === '欧元区' || e.country === '法国'))
-        );
-
-        if (countryEvents.length > 0) {
-            const sorted = countryEvents.sort((a, b) => {
-                const importanceOrder = { high: 0, medium: 1, low: 2 };
-                return importanceOrder[a.importance] - importanceOrder[b.importance];
-            });
-
-            const topEvent = sorted[0];
-            const module = createCountryModule(country, topEvent);
-            countryModulesContainer.appendChild(module);
-        }
-    });
-}
-
-function createCountryModule(country, event) {
-    const module = document.createElement('div');
-    module.className = `country-module ${event.type === 'geopolitical' ? 'geopolitical' : ''}`;
-
-    const coords = countryCoordinates[country] || event.coordinates;
-    module.style.top = `${coords.y}%`;
-    module.style.left = `${coords.x}%`;
-
-    const flagMap = {
-        '美国': '🇺🇸',
-        '中国': '🇨🇳',
-        '欧元区': '🇪🇺',
-        '日本': '🇯🇵',
-        '俄罗斯': '🇷🇺',
-        '乌克兰': '🇺🇦'
-    };
-
-    module.innerHTML = `
-        <div class="country-name">${flagMap[country] || ''} ${country}</div>
-        <div class="country-event">
-            <span class="event-dot ${event.type}"></span>
-            <span class="event-name">${event.title.length > 10 ? event.title.substring(0, 10) + '...' : event.title}</span>
-        </div>
-    `;
-
-    module.addEventListener('click', () => openEventModal(event));
-
-    return module;
 }
 
 // ========================================
@@ -425,11 +445,10 @@ function filterEvents() {
         selectedTypes.includes(event.type)
     );
 
-    initEventMarkers();
+    updateMapMarkers();
     initTimeline();
     updateStats();
     initWeeklyFocus();
-    initCountryModules();
 }
 
 // ========================================
@@ -556,8 +575,10 @@ function initEventListeners() {
 // 工具函数
 // ========================================
 window.addEventListener('resize', debounce(() => {
-    initEventMarkers();
-    initCountryModules();
+    // Leaflet 地图会自动处理 resize
+    if (map) {
+        map.invalidateSize();
+    }
 }, 250));
 
 function debounce(func, wait) {

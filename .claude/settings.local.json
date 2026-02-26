@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m \"Initial commit: 全球宏观事件追踪系统 v1.0\")",
+      "Bash(git config user.email \"macro-tracker@example.com\")",
+      "Bash(git config user.name \"Macro Tracker\")",
+      "Bash(git config user.email \"user@example.com\")",
+      "Bash(git config user.name \"User\")",
+      "Bash(npx surge --help)",
+      "Bash(npx surge . global-macro-tracker.surge.sh --preview)",
+      "Bash(git add .)"
+    ]
+  }
+}
