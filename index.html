@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球宏观事件追踪 | Global Macro Events Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🌐</span>
+                <span class="logo-text">全球宏观事件追踪</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active">世界地图</a>
+                <a href="#" class="nav-link">时间轴</a>
+                <a href="#" class="nav-link">事件列表</a>
+            </nav>
+            <div class="header-right">
+                <span class="update-time">最后更新: 2026-02-26 20:15</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 左侧筛选面板 -->
+        <aside class="filter-panel">
+            <h3 class="panel-title">事件筛选</h3>
+
+            <div class="filter-group">
+                <label class="filter-label">事件类型</label>
+                <div class="filter-options">
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked data-type="geopolitical">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">⚠️ 地缘冲突</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked data-type="central-bank">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">🏦 央行会议</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked data-type="summit">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">🤝 国际峰会</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked data-type="political">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">🏛️ 政治选举</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked data-type="trade">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">📈 贸易协定</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">时间范围</label>
+                <select class="filter-select" id="timeRangeSelect">
+                    <option value="all">全部事件</option>
+                    <option value="week">未来一周</option>
+                    <option value="month">未来一月</option>
+                    <option value="quarter">未来一季</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">重要程度</label>
+                <div class="importance-filter">
+                    <span class="importance-dot high active" data-importance="high" title="高"></span>
+                    <span class="importance-dot medium active" data-importance="medium" title="中"></span>
+                    <span class="importance-dot low active" data-importance="low" title="低"></span>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <h4 class="stats-title">快速统计</h4>
+                <div class="stat-item">
+                    <span class="stat-label">本月事件</span>
+                    <span class="stat-value" id="monthStat">24</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">高影响事件</span>
+                    <span class="stat-value highlight" id="highStat">8</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">本周重点关注</span>
+                    <span class="stat-value" id="weekStat">3</span>
+                </div>
+            </div>
+
+            <!-- 未来一周关注模块 -->
+            <div class="weekly-focus">
+                <h4 class="focus-title">
+                    <span class="focus-icon">📅</span>
+                    未来一周关注
+                </h4>
+                <div class="focus-list" id="weeklyFocusList">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间地图区域 -->
+        <section class="map-container">
+            <div class="map-header">
+                <h2 class="map-title">2026年全球重大事件分布</h2>
+                <div class="map-controls">
+                    <button class="control-btn" id="zoomIn" title="放大">+</button>
+                    <button class="control-btn" id="zoomOut" title="缩小">−</button>
+                    <button class="control-btn" id="resetView" title="重置">重置</button>
+                </div>
+            </div>
+
+            <div class="map-wrapper" id="mapWrapper">
+                <!-- SVG世界地图 -->
+                <svg id="worldMap" viewBox="0 0 1200 600" class="world-map" preserveAspectRatio="xMidYMid meet">
+                    <!-- 渐变定义 -->
+                    <defs>
+                        <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f0f4f8"/>
+                            <stop offset="100%" style="stop-color:#d9e2ec"/>
+                        </linearGradient>
+                        <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e8eef4"/>
+                            <stop offset="100%" style="stop-color:#d1dce5"/>
+                        </linearGradient>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.1"/>
+                        </filter>
+                    </defs>
+
+                    <!-- 海洋背景 -->
+                    <rect width="1200" height="600" fill="url(#oceanGradient)"/>
+
+                    <!-- 经纬网格 -->
+                    <g class="grid-lines" stroke="#c5d1dc" stroke-width="0.3" opacity="0.5">
+                        <!-- 纬线 -->
+                        <line x1="0" y1="100" x2="1200" y2="100"/>
+                        <line x1="0" y1="200" x2="1200" y2="200"/>
+                        <line x1="0" y1="300" x2="1200" y2="300"/>
+                        <line x1="0" y1="400" x2="1200" y2="400"/>
+                        <line x1="0" y1="500" x2="1200" y2="500"/>
+                        <!-- 经线 -->
+                        <line x1="100" y1="0" x2="100" y2="600"/>
+                        <line x1="200" y1="0" x2="200" y2="600"/>
+                        <line x1="300" y1="0" x2="300" y2="600"/>
+                        <line x1="400" y1="0" x2="400" y2="600"/>
+                        <line x1="500" y1="0" x2="500" y2="600"/>
+                        <line x1="600" y1="0" x2="600" y2="600"/>
+                        <line x1="700" y1="0" x2="700" y2="600"/>
+                        <line x1="800" y1="0" x2="800" y2="600"/>
+                        <line x1="900" y1="0" x2="900" y2="600"/>
+                        <line x1="1000" y1="0" x2="1000" y2="600"/>
+                        <line x1="1100" y1="0" x2="1100" y2="600"/>
+                    </g>
+
+                    <!-- 更详细的大陆轮廓 -->
+                    <g class="continents" filter="url(#shadow)">
+                        <!-- 北美洲 -->
+                        <path class="continent" d="M80,80 Q120,50 180,55 L240,70 Q280,90 300,120 L320,160 Q310,200 280,230 L240,260 Q200,280 160,270 L120,240 Q80,200 70,150 Q60,100 80,80 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 加拿大北部 -->
+                        <path class="continent" d="M90,40 Q150,25 200,35 L250,50 Q240,70 200,65 L140,60 Q100,55 90,40 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 墨西哥 -->
+                        <path class="continent" d="M120,260 Q160,250 190,280 L200,320 Q180,350 150,340 L120,310 Q100,280 120,260 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 南美洲 -->
+                        <path class="continent" d="M200,350 Q240,340 270,370 L290,430 Q280,500 240,540 L190,560 Q150,540 160,480 L175,400 Q180,360 200,350 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 欧洲 -->
+                        <path class="continent" d="M520,70 Q580,50 640,65 L680,100 Q700,140 680,180 L640,200 Q580,210 540,180 L510,140 Q500,100 520,70 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 英国 -->
+                        <path class="continent" d="M485,95 Q500,85 510,100 L505,130 Q490,135 485,120 L485,95 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 非洲 -->
+                        <path class="continent" d="M530,220 Q590,200 640,240 L660,320 Q650,420 590,470 L520,480 Q470,450 480,380 L500,300 Q510,250 530,220 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 俄罗斯/亚洲 -->
+                        <path class="continent" d="M680,40 Q850,20 1000,50 L1100,100 Q1160,150 1140,220 L1080,260 Q950,280 820,240 L700,180 Q640,120 680,40 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 中东 -->
+                        <path class="continent" d="M620,200 Q680,190 720,220 L740,270 Q720,310 680,300 L640,270 Q610,240 620,200 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 印度 -->
+                        <path class="continent" d="M780,240 Q820,220 850,260 L860,340 Q840,400 800,390 L770,340 Q760,280 780,240 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 中国 -->
+                        <path class="continent" d="M860,140 Q940,120 1020,150 L1060,200 Q1050,260 980,270 L880,250 Q840,200 860,140 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 日本 -->
+                        <path class="continent" d="M1100,160 Q1120,140 1130,170 L1120,220 Q1100,230 1095,200 L1100,160 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 朝鲜半岛 -->
+                        <path class="continent" d="M1040,180 Q1060,165 1070,190 L1065,230 Q1050,240 1040,220 L1040,180 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 东南亚 -->
+                        <path class="continent" d="M920,320 Q960,300 1000,330 L1010,380 Q990,420 950,410 L910,380 Q900,340 920,320 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 印尼 -->
+                        <path class="continent" d="M900,430 Q980,410 1060,440 L1080,470 Q1040,490 970,480 L910,460 Q890,445 900,430 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 澳大利亚 -->
+                        <path class="continent" d="M980,490 Q1060,470 1120,510 L1140,560 Q1110,590 1040,580 L980,550 Q950,520 980,490 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                        <!-- 新西兰 -->
+                        <path class="continent" d="M1160,540 Q1175,530 1180,550 L1175,580 Q1160,590 1155,570 L1160,540 Z" fill="url(#landGradient)" stroke="#b8c5d1" stroke-width="0.8"/>
+                    </g>
+
+                    <!-- 赤道线 -->
+                    <line x1="0" y1="300" x2="1200" y2="300" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.4"/>
+
+                    <!-- 区域标签 -->
+                    <g class="region-labels" fill="#64748b" font-size="10" font-weight="500" opacity="0.6">
+                        <text x="180" y="150">北美</text>
+                        <text x="200" y="450">南美</text>
+                        <text x="580" y="130">欧洲</text>
+                        <text x="560" y="350">非洲</text>
+                        <text x="900" y="150">亚洲</text>
+                        <text x="1050" y="530">大洋洲</text>
+                    </g>
+                </svg>
+
+                <!-- 事件标记点 -->
+                <div class="event-markers" id="eventMarkers">
+                    <!-- 动态生成的事件标记 -->
+                </div>
+
+                <!-- 国家事件小模块 -->
+                <div class="country-event-modules" id="countryModules">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 图例 -->
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-dot geopolitical"></span>
+                    <span>地缘冲突</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot central-bank"></span>
+                    <span>央行会议</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot summit"></span>
+                    <span>国际峰会</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot political"></span>
+                    <span>政治选举</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot trade"></span>
+                    <span>贸易协定</span>
+                </div>
+                <div class="legend-item importance">
+                    <span class="importance-indicator">
+                        <span class="dot high"></span>
+                        <span class="dot medium"></span>
+                        <span class="dot low"></span>
+                    </span>
+                    <span>重要程度</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 右侧时间轴面板 -->
+        <aside class="timeline-panel">
+            <h3 class="panel-title">近期事件时间轴</h3>
+
+            <div class="timeline" id="timeline">
+                <!-- 时间轴项目动态生成 -->
+            </div>
+        </aside>
+    </main>
+
+    <!-- 事件详情弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="eventModal">
+            <div class="modal-header">
+                <div class="modal-header-top">
+                    <span class="modal-event-type" id="modalEventType">央行会议</span>
+                    <button class="modal-close" id="modalClose">&times;</button>
+                </div>
+                <h2 class="modal-title" id="modalTitle">美联储FOMC会议</h2>
+                <div class="modal-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📍</span>
+                        <span id="modalLocation">美国华盛顿</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span id="modalDate">2026年3月18-19日</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">⚡</span>
+                        <span id="modalImportance">高影响</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 子标签页导航 -->
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="overview">📋 概述</button>
+                <button class="tab-btn" data-tab="timeline">📅 时间线</button>
+                <button class="tab-btn" data-tab="outlook">🎯 前瞻</button>
+                <button class="tab-btn" data-tab="news">📰 新闻</button>
+                <button class="tab-btn" data-tab="other">📊 其他</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- 概述标签页 -->
+                <div class="tab-content active" id="tab-overview">
+                    <div class="modal-section">
+                        <h3>事件概述</h3>
+                        <p id="modalSummary">事件概述内容...</p>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>影响分析</h3>
+                        <div class="impact-grid" id="modalImpact">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 时间线标签页 -->
+                <div class="tab-content" id="tab-timeline">
+                    <div class="modal-section">
+                        <h3>已发生事件</h3>
+                        <div class="history-timeline" id="modalHistory">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>后续关注点</h3>
+                        <div class="future-dates" id="modalFutureDates">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 前瞻标签页 -->
+                <div class="tab-content" id="tab-outlook">
+                    <div class="modal-section">
+                        <h3>市场预期</h3>
+                        <p id="modalOutlookExpectation">市场预期内容...</p>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>关注要点</h3>
+                        <ul id="modalKeyPoints">
+                            <!-- 动态生成 -->
+                        </ul>
+                    </div>
+
+                    <!-- 地缘冲突专属模块 -->
+                    <div class="geopolitical-section" id="geopoliticalSection" style="display: none;">
+                        <h3>⚠️ 地缘态势分析</h3>
+                        <div class="geopolitical-content">
+                            <div class="geo-status">
+                                <span class="status-label">当前态势:</span>
+                                <span class="status-value" id="geoStatus">紧张升级</span>
+                            </div>
+                            <div class="geo-factors">
+                                <div class="factor-item">
+                                    <span class="factor-title">关键因素</span>
+                                    <ul id="geoKeyFactors">
+                                        <!-- 动态生成 -->
+                                    </ul>
+                                </div>
+                                <div class="factor-item">
+                                    <span class="factor-title">市场影响</span>
+                                    <ul id="geoMarketImpact">
+                                        <!-- 动态生成 -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新闻标签页 -->
+                <div class="tab-content" id="tab-news">
+                    <div class="modal-section">
+                        <h3>新闻来源</h3>
+                        <div class="news-links" id="modalNewsLinks">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                    <div class="modal-section">
+                        <h3>相关报道</h3>
+                        <div class="related-news" id="modalRelatedNews">
+                            <p class="empty-hint">暂无相关报道</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其他信息标签页 -->
+                <div class="tab-content" id="tab-other">
+                    <div class="modal-section">
+                        <h3>背景信息</h3>
+                        <div id="modalBackground">
+                            <p class="empty-hint">暂无背景信息</p>
+                        </div>
+                    </div>
+                    <div class="modal-section">
+                        <h3>数据来源</h3>
+                        <div id="modalDataSources">
+                            <ul>
+                                <li>路透社 (Reuters)</li>
+                                <li>彭博社 (Bloomberg)</li>
+                                <li>金融时报 (Financial Times)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-section">
+                        <h3>风险提示</h3>
+                        <div class="risk-warning">
+                            <p>本信息仅供参考，不构成投资建议。市场有风险，投资需谨慎。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnAddWatch">⭐ 添加关注</button>
+                <button class="btn-primary" id="btnExport">📄 导出报告</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="events-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
