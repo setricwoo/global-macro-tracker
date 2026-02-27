@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全球宏观事件追踪 | Global Macro Events Tracker</title>
+    <title>【华泰固收】全球宏观经济追踪</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Leaflet CSS - 类似CFR风格的交互式地图 -->
@@ -15,13 +15,8 @@
         <div class="header-content">
             <div class="logo">
                 <span class="logo-icon">🌐</span>
-                <span class="logo-text">全球宏观事件追踪</span>
+                <span class="logo-text">【华泰固收】全球宏观经济追踪</span>
             </div>
-            <nav class="nav-links">
-                <a href="#" class="nav-link active">世界地图</a>
-                <a href="#" class="nav-link">时间轴</a>
-                <a href="#" class="nav-link">事件列表</a>
-            </nav>
             <div class="header-right">
                 <span class="update-time">最后更新: 2026-02-26 20:15</span>
             </div>
@@ -30,83 +25,13 @@
 
     <!-- 主内容区 -->
     <main class="main-content">
-        <!-- 左侧筛选面板 -->
+        <!-- 左侧经济日历面板 -->
         <aside class="filter-panel">
-            <h3 class="panel-title">事件筛选</h3>
+            <h3 class="panel-title">📅 未来两周核心经济日历</h3>
 
-            <div class="filter-group">
-                <label class="filter-label">事件类型</label>
-                <div class="filter-options">
-                    <label class="checkbox-item">
-                        <input type="checkbox" checked data-type="geopolitical">
-                        <span class="checkmark"></span>
-                        <span class="checkbox-label">⚠️ 地缘冲突</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" checked data-type="central-bank">
-                        <span class="checkmark"></span>
-                        <span class="checkbox-label">🏦 央行会议</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" checked data-type="summit">
-                        <span class="checkmark"></span>
-                        <span class="checkbox-label">🤝 国际峰会</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" checked data-type="political">
-                        <span class="checkmark"></span>
-                        <span class="checkbox-label">🏛️ 政治选举</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" checked data-type="trade">
-                        <span class="checkmark"></span>
-                        <span class="checkbox-label">📈 贸易协定</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label">时间范围</label>
-                <select class="filter-select" id="timeRangeSelect">
-                    <option value="all">全部事件</option>
-                    <option value="week">未来一周</option>
-                    <option value="month">未来一月</option>
-                    <option value="quarter">未来一季</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label">重要程度</label>
-                <div class="importance-filter">
-                    <span class="importance-dot high active" data-importance="high" title="高"></span>
-                    <span class="importance-dot medium active" data-importance="medium" title="中"></span>
-                    <span class="importance-dot low active" data-importance="low" title="低"></span>
-                </div>
-            </div>
-
-            <div class="quick-stats">
-                <h4 class="stats-title">快速统计</h4>
-                <div class="stat-item">
-                    <span class="stat-label">本月事件</span>
-                    <span class="stat-value" id="monthStat">24</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">高影响事件</span>
-                    <span class="stat-value highlight" id="highStat">8</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">本周重点关注</span>
-                    <span class="stat-value" id="weekStat">3</span>
-                </div>
-            </div>
-
-            <!-- 未来一周关注模块 -->
-            <div class="weekly-focus">
-                <h4 class="focus-title">
-                    <span class="focus-icon">📅</span>
-                    未来一周关注
-                </h4>
-                <div class="focus-list" id="weeklyFocusList">
+            <!-- 本周重要经济数据 -->
+            <div class="economic-calendar">
+                <div class="calendar-list" id="economicCalendarList">
                     <!-- 动态生成 -->
                 </div>
             </div>
@@ -115,7 +40,7 @@
         <!-- 中间地图区域 -->
         <section class="map-container">
             <div class="map-header">
-                <h2 class="map-title">2026年全球重大事件分布</h2>
+                <h2 class="map-title">全球地缘信息追踪</h2>
                 <div class="map-controls">
                     <button class="control-btn" id="zoomIn" title="放大">+</button>
                     <button class="control-btn" id="zoomOut" title="缩小">−</button>
@@ -130,43 +55,55 @@
 
             <!-- 图例 -->
             <div class="map-legend">
-                <div class="legend-item">
-                    <span class="legend-dot geopolitical"></span>
-                    <span>地缘冲突</span>
+                <div class="legend-row">
+                    <span class="legend-title">地缘冲突</span>
+                    <div class="legend-item">
+                        <span class="legend-dot critical"></span>
+                        <span>Critical 关键影响</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot significant"></span>
+                        <span>Significant 重要影响</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot limited"></span>
+                        <span>Limited 有限影响</span>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-dot central-bank"></span>
-                    <span>央行会议</span>
+                <div class="legend-row">
+                    <span class="legend-title">重大会议与事件</span>
+                    <div class="legend-item">
+                        <span class="legend-diamond political"></span>
+                        <span>🏛️ 政治</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-diamond diplomatic"></span>
+                        <span>🤝 外交</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-diamond financial"></span>
+                        <span>🏦 金融</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-diamond economic"></span>
+                        <span>📈 经济</span>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-dot summit"></span>
-                    <span>国际峰会</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot political"></span>
-                    <span>政治选举</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot trade"></span>
-                    <span>贸易协定</span>
-                </div>
-                <div class="legend-item importance">
-                    <span class="importance-indicator">
-                        <span class="dot high"></span>
-                        <span class="dot medium"></span>
-                        <span class="dot low"></span>
-                    </span>
-                    <span>重要程度</span>
+                <div class="legend-row">
+                    <span class="legend-title">📊 经济数据浏览器</span>
                 </div>
             </div>
+
+            <!-- 移动端图例按钮 -->
+            <button class="mobile-legend-btn" id="mobileLegendBtn" style="display: none;">📋</button>
         </section>
 
-        <!-- 右侧时间轴面板 -->
+        <!-- 右侧重大会议与事件面板 -->
         <aside class="timeline-panel">
-            <h3 class="panel-title">近期事件时间轴</h3>
+            <h3 class="panel-title">📌 重大会议与事件</h3>
 
-            <div class="timeline" id="timeline">
-                <!-- 时间轴项目动态生成 -->
+            <div class="major-events-list" id="majorEventsList">
+                <!-- 重大事件列表动态生成 -->
             </div>
         </aside>
     </main>
@@ -198,15 +135,14 @@
 
             <!-- 子标签页导航 -->
             <div class="modal-tabs">
-                <button class="tab-btn active" data-tab="overview">📋 概述</button>
-                <button class="tab-btn" data-tab="timeline">📅 时间线</button>
+                <button class="tab-btn active" data-tab="overview">📋 概述与时间线</button>
                 <button class="tab-btn" data-tab="outlook">🎯 前瞻</button>
                 <button class="tab-btn" data-tab="news">📰 新闻</button>
                 <button class="tab-btn" data-tab="other">📊 其他</button>
             </div>
 
             <div class="modal-body">
-                <!-- 概述标签页 -->
+                <!-- 概述与时间线标签页 -->
                 <div class="tab-content active" id="tab-overview">
                     <div class="modal-section">
                         <h3>事件概述</h3>
@@ -214,17 +150,7 @@
                     </div>
 
                     <div class="modal-section">
-                        <h3>影响分析</h3>
-                        <div class="impact-grid" id="modalImpact">
-                            <!-- 动态生成 -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 时间线标签页 -->
-                <div class="tab-content" id="tab-timeline">
-                    <div class="modal-section">
-                        <h3>已发生事件</h3>
+                        <h3>已发生事件 (Latest News)</h3>
                         <div class="history-timeline" id="modalHistory">
                             <!-- 动态生成 -->
                         </div>
@@ -233,6 +159,13 @@
                     <div class="modal-section">
                         <h3>后续关注点</h3>
                         <div class="future-dates" id="modalFutureDates">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>市场影响分析</h3>
+                        <div class="impact-grid" id="modalImpact">
                             <!-- 动态生成 -->
                         </div>
                     </div>
@@ -257,6 +190,10 @@
                         <h3>⚠️ 地缘态势分析</h3>
                         <div class="geopolitical-content">
                             <div class="geo-status">
+                                <span class="status-label">CFR影响级别:</span>
+                                <span class="cfr-impact-badge" id="geoCfrImpact">Critical</span>
+                            </div>
+                            <div class="geo-status">
                                 <span class="status-label">当前态势:</span>
                                 <span class="status-value" id="geoStatus">紧张升级</span>
                             </div>
@@ -272,6 +209,13 @@
                                     <ul id="geoMarketImpact">
                                         <!-- 动态生成 -->
                                     </ul>
+                                </div>
+                            </div>
+                            <!-- 分析性文字 -->
+                            <div class="geo-analysis" id="geoAnalysis">
+                                <h4>📝 深度分析</h4>
+                                <div class="analysis-content" id="geoAnalysisContent">
+                                    <!-- 动态生成 -->
                                 </div>
                             </div>
                         </div>
@@ -323,13 +267,268 @@
 
             <div class="modal-footer">
                 <button class="btn-secondary" id="btnAddWatch">⭐ 添加关注</button>
-                <button class="btn-primary" id="btnExport">📄 导出报告</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 经济数据详情弹窗 - 金十数据风格 -->
+    <div class="modal-overlay" id="economicModalOverlay">
+        <div class="modal economic-modal" id="economicModal">
+            <div class="modal-header">
+                <div class="modal-header-top">
+                    <span class="modal-event-type economic" id="econModalType">经济数据</span>
+                    <button class="modal-close" id="econModalClose">&times;</button>
+                </div>
+                <h2 class="modal-title" id="econModalTitle">美国2月非农就业数据</h2>
+                <div class="modal-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span id="econModalDate">2026年3月6日 21:30</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🌍</span>
+                        <span id="econModalCountry">美国</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">⭐</span>
+                        <span id="econModalImportance">高重要性</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body economic-detail-body">
+                <!-- 数值展示区 -->
+                <div class="economic-detail-section">
+                    <div class="economic-values-grid" id="econValuesGrid">
+                        <div class="economic-value-card">
+                            <div class="label">前值</div>
+                            <div class="value" id="econPrevValue">--</div>
+                        </div>
+                        <div class="economic-value-card">
+                            <div class="label">预测值</div>
+                            <div class="value" id="econForecastValue">--</div>
+                        </div>
+                        <div class="economic-value-card">
+                            <div class="label">公布值</div>
+                            <div class="value" id="econActualValue">待公布</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据释义 -->
+                <div class="economic-detail-section">
+                    <div class="economic-detail-title">📖 数据释义</div>
+                    <div class="economic-description" id="econDescription">
+                        数据释义内容...
+                    </div>
+                </div>
+
+                <!-- 数据影响 -->
+                <div class="economic-detail-section">
+                    <div class="economic-detail-title">📊 数据影响</div>
+                    <div class="economic-description" id="econImpact">
+                        数据影响内容...
+                    </div>
+                </div>
+
+                <!-- 公布信息 -->
+                <div class="economic-detail-section">
+                    <div class="economic-detail-title">🏛️ 公布信息</div>
+                    <div class="economic-info-grid">
+                        <div class="info-item">
+                            <span class="info-label">公布机构：</span>
+                            <span class="info-value" id="econAgency">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">数据频率：</span>
+                            <span class="info-value" id="econFrequency">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">下次公布：</span>
+                            <span class="info-value" id="econNextDate">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 风险提示 -->
+                <div class="risk-warning">
+                    <p>⚠️ 本信息仅供参考，不构成投资建议。市场有风险，投资需谨慎。</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="econBtnRemind">🔔 设置提醒</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 经济数据浏览器弹窗 -->
+    <div class="modal-overlay" id="econDataModalOverlay">
+        <div class="modal econ-data-modal" id="econDataModal">
+            <div class="modal-header">
+                <div class="modal-header-top">
+                    <span class="modal-event-type economic-data" id="econDataModalType">📊 经济数据浏览器</span>
+                    <button class="modal-close" id="econDataModalClose">&times;</button>
+                </div>
+                <h2 class="modal-title" id="econDataModalTitle">美国宏观经济数据</h2>
+            </div>
+
+            <div class="modal-body econ-data-body">
+                <!-- 控制面板 -->
+                <div class="econ-controls">
+                    <!-- 第一行：分类和图表类型 -->
+                    <div class="econ-control-row">
+                        <div class="econ-control-group">
+                            <label>数据分类</label>
+                            <select id="econCategorySelect" class="econ-select">
+                                <option value="">全部分类</option>
+                            </select>
+                        </div>
+                        <div class="econ-control-group">
+                            <label>图表类型</label>
+                            <div class="econ-chart-type-toggle">
+                                <button class="chart-type-btn active" data-type="line" title="折线图">📈 折线</button>
+                                <button class="chart-type-btn" data-type="bar" title="柱状图">📊 柱状</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 时间范围选择 - 拖动滑块 -->
+                    <div class="econ-control-row econ-time-row">
+                        <div class="econ-control-group econ-time-slider-group">
+                            <label>时间范围 <span id="econTimeDisplay">2021年 - 2026年</span></label>
+                            <div class="econ-range-slider-container">
+                                <input type="range" id="econStartYear" class="econ-range-slider" min="1980" max="2026" value="2021">
+                                <input type="range" id="econEndYear" class="econ-range-slider" min="1980" max="2026" value="2026">
+                                <div class="econ-slider-track">
+                                    <div class="econ-slider-range" id="econSliderRange"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="econ-control-group econ-quick-group">
+                            <label>快捷</label>
+                            <div class="econ-quick-time">
+                                <button class="quick-time-btn" data-years="1">1年</button>
+                                <button class="quick-time-btn" data-years="3">3年</button>
+                                <button class="quick-time-btn active" data-years="5">5年</button>
+                                <button class="quick-time-btn" data-years="10">10年</button>
+                                <button class="quick-time-btn" data-years="100">全部</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 指标选择 -->
+                    <div class="econ-control-group econ-full-width">
+                        <label>选择指标 (可多选，多指标自动分轴显示)</label>
+                        <div class="econ-indicator-list" id="econIndicatorList">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="econ-chart-container">
+                    <canvas id="econChart"></canvas>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="econ-data-table-container">
+                    <table class="econ-data-table" id="econDataTable">
+                        <thead>
+                            <tr id="econTableHeader">
+                                <!-- 动态生成 -->
+                            </tr>
+                        </thead>
+                        <tbody id="econTableBody">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="econDataExport">📥 导出数据</button>
+                <button class="btn-primary" id="econDataClose">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端图例弹窗 -->
+    <div class="mobile-legend-overlay" id="mobileLegendOverlay" style="display: none;">
+        <div class="mobile-legend-modal">
+            <div class="mobile-legend-header">
+                <h3>📋 图例说明</h3>
+                <button class="mobile-legend-close" id="mobileLegendClose">&times;</button>
+            </div>
+            <div class="mobile-legend-content">
+                <div class="mobile-legend-section">
+                    <div class="mobile-legend-title">地缘冲突</div>
+                    <div class="mobile-legend-items">
+                        <div class="mobile-legend-item">
+                            <span class="legend-dot critical"></span>
+                            <span>Critical 关键影响</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="legend-dot significant"></span>
+                            <span>Significant 重要影响</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="legend-dot limited"></span>
+                            <span>Limited 有限影响</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mobile-legend-section">
+                    <div class="mobile-legend-title">重大会议与事件</div>
+                    <div class="mobile-legend-items">
+                        <div class="mobile-legend-item">
+                            <span class="legend-diamond political"></span>
+                            <span>🏛️ 政治</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="legend-diamond diplomatic"></span>
+                            <span>🤝 外交</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="legend-diamond financial"></span>
+                            <span>🏦 金融</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="legend-diamond economic"></span>
+                            <span>📈 经济</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mobile-legend-section">
+                    <div class="mobile-legend-title">📊 经济数据浏览器</div>
+                    <div class="mobile-legend-items">
+                        <div class="mobile-legend-item">
+                            <span class="mobile-econ-color us"></span>
+                            <span>美国</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="mobile-econ-color eurozone"></span>
+                            <span>欧元区</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="mobile-econ-color uk"></span>
+                            <span>英国</span>
+                        </div>
+                        <div class="mobile-legend-item">
+                            <span class="mobile-econ-color japan"></span>
+                            <span>日本</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Leaflet JS - 交互式地图库 -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="economic-data.js"></script>
     <script src="events-data.js"></script>
     <script src="app.js"></script>
 </body>
