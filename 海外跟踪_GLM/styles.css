@@ -1,0 +1,3701 @@
+/* ========================================
+   全局样式与变量
+   ======================================== */
+:root {
+    /* 主色调 - 专业金融风格 */
+    --primary-color: #1e3a5f;
+    --primary-light: #2d5a8a;
+    --primary-dark: #0f2847;
+
+    /* 功能色 */
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+
+    /* 事件类型颜色 */
+    --political-color: #8b5cf6;
+    --central-bank-color: #ef4444;
+    --summit-color: #10b981;
+    --trade-color: #f59e0b;
+    --geopolitical-color: #dc2626;
+
+    /* 中性色 */
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e2e8f0;
+    --border-color: #cbd5e1;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+
+    /* 尺寸 */
+    --header-height: 56px;
+    --sidebar-width: 240px;
+    --timeline-width: 280px;
+    --border-radius: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+
+    /* 动画 */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+
+    /* 移动端视口高度（JavaScript动态设置） */
+    --vh: 1vh;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* 移动端优化：防止触摸高亮 */
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    color: var(--text-primary);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    /* 移动端优化：平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+    /* 防止字体大小自动调整 */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* ========================================
+   顶部导航栏
+   ======================================== */
+.header {
+    height: var(--header-height);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+    height: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 24px;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-link {
+    padding: 8px 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 58, 95, 0.3);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.update-time {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+/* ========================================
+   主内容区布局
+   ======================================== */
+.main-content {
+    display: flex;
+    margin-top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    height: calc(var(--vh, 1vh) * 100 - var(--header-height));
+    padding: 16px;
+    gap: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* ========================================
+   左侧经济日历面板
+   ======================================== */
+.filter-panel {
+    width: 320px;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    max-height: calc(100vh - var(--header-height) - 32px);
+    box-shadow: var(--shadow-md);
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* ========================================
+   经济日历模块
+   ======================================== */
+.economic-calendar {
+    margin-bottom: 16px;
+}
+
+.calendar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ========================================
+   经济日历模块 - 金十数据风格紧凑布局
+   ======================================== */
+.calendar-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 6px 8px;
+    background: #ffffff;
+    border-radius: 6px;
+    border-left: 3px solid #cbd5e1;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    visibility: visible !important;
+    opacity: 1 !important;
+    gap: 8px;
+    margin-bottom: 3px;
+    font-size: 12px;
+}
+
+.calendar-item:hover {
+    background: #f0f9ff;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.calendar-item.high {
+    border-left-color: #ef4444;
+    background: rgba(254, 226, 226, 0.2);
+}
+
+.calendar-item.high:hover {
+    background: rgba(254, 226, 226, 0.4);
+}
+
+.calendar-item.central-bank {
+    border-left-color: #3b82f6;
+}
+
+.calendar-item.economic {
+    border-left-color: #8b5cf6;
+}
+
+.calendar-item.summit {
+    border-left-color: #10b981;
+}
+
+/* 日历时间列 */
+.calendar-time-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    flex-shrink: 0;
+}
+
+.calendar-date-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e3a5f;
+    line-height: 1.2;
+}
+
+.calendar-date-week {
+    font-size: 9px;
+    color: #94a3b8;
+}
+
+.calendar-time {
+    font-size: 10px;
+    font-weight: 500;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* 日历国旗/图标 */
+.calendar-flag {
+    width: 22px;
+    height: 16px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+/* 日历内容区 */
+.calendar-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.calendar-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+    /* 允许换行显示完整标题 */
+    white-space: normal;
+    overflow: visible;
+    word-break: break-word;
+}
+
+.calendar-country {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* 日历数值区 */
+.calendar-values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 60px;
+    flex-shrink: 0;
+    gap: 2px;
+}
+
+.calendar-value-row {
+    display: flex;
+    gap: 6px;
+    font-size: 10px;
+}
+
+.calendar-value-label {
+    color: #94a3b8;
+}
+
+.calendar-value-num {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.calendar-value-num.better {
+    color: #10b981;
+}
+
+.calendar-value-num.worse {
+    color: #ef4444;
+}
+
+/* 重要性星级 */
+.calendar-importance {
+    display: flex;
+    gap: 1px;
+    margin-top: 2px;
+}
+
+.calendar-star {
+    width: 8px;
+    height: 8px;
+    color: #d1d5db;
+}
+
+.calendar-star.active {
+    color: #f59e0b;
+}
+
+.calendar-importance.high .calendar-star.active {
+    color: #ef4444;
+}
+
+.calendar-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* 经济数据详情弹窗样式 */
+.economic-detail-section {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.economic-detail-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.economic-values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.economic-value-card {
+    text-align: center;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.economic-value-card .label {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.economic-value-card .value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.economic-value-card .value.better {
+    color: #10b981;
+}
+
+.economic-value-card .value.worse {
+    color: #ef4444;
+}
+
+.economic-description {
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.economic-history-chart {
+    height: 150px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* 经济数据弹窗专属样式 */
+.economic-modal {
+    max-width: 560px;
+}
+
+.economic-detail-body {
+    padding: 16px 20px;
+}
+
+.economic-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.economic-info-grid .info-item {
+    display: flex;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.economic-info-grid .info-label {
+    color: #64748b;
+}
+
+.economic-info-grid .info-value {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* ========================================
+   地缘冲突预警模块
+   ======================================== */
+.geopolitical-alert {
+    background: linear-gradient(135deg, rgba(254, 226, 226, 0.3) 0%, rgba(254, 202, 202, 0.2) 100%);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 16px;
+}
+
+.alert-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--danger-color);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.alert-icon {
+    font-size: 14px;
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alert-item {
+    padding: 10px 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #ef4444;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-height: 60px;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+.alert-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow-sm);
+}
+
+.alert-item.Critical {
+    border-left-color: #dc2626;
+    background: rgba(254, 226, 226, 0.5);
+}
+
+.alert-item.Significant {
+    border-left-color: #f59e0b;
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.alert-header .alert-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.alert-title-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.impact-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.impact-badge.critical {
+    background: #dc2626;
+    color: white;
+}
+
+.impact-badge.significant {
+    background: #f59e0b;
+    color: white;
+}
+
+.alert-location {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.alert-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-indicator.status-worsening {
+    background: #dc2626;
+    animation: pulse-red 1.5s infinite;
+}
+
+.status-indicator.status-stable {
+    background: #f59e0b;
+}
+
+.status-indicator.status-improving {
+    background: #10b981;
+}
+
+@keyframes pulse-red {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-text {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.alert-empty {
+    text-align: center;
+    padding: 16px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* ========================================
+   市场休市提醒模块
+   ======================================== */
+.market-holiday {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+}
+
+.holiday-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0369a1;
+    margin-bottom: 10px;
+}
+
+.holiday-icon {
+    font-size: 14px;
+}
+
+.holiday-content {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.holiday-item {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.holiday-date {
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 60px;
+}
+
+.holiday-market {
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   中间地图区域
+   ======================================== */
+.map-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 500px;
+    height: 100%;
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+
+.map-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.map-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.control-btn#resetView {
+    width: auto;
+    padding: 0 14px;
+    font-size: 12px;
+}
+
+.map-wrapper {
+    flex: 1;
+    background: #e8f0f5;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+    height: 100%;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Leaflet 地图样式 */
+.world-map {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    display: block;
+    flex: 1;
+    z-index: 1;
+}
+
+/* Leaflet 自定义样式 - 类似CFR风格 */
+.leaflet-container {
+    background: #e8f0f5;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+}
+
+.leaflet-control-zoom a {
+    background: #fff !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 16px !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+.leaflet-control-attribution {
+    background: rgba(255,255,255,0.8) !important;
+    font-size: 10px !important;
+    color: #64748b !important;
+}
+
+/* 自定义地图标记 */
+.custom-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.custom-marker:hover {
+    transform: scale(1.2);
+    z-index: 1000 !important;
+}
+
+.marker-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid #fff;
+}
+
+.marker-icon.high {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+}
+
+.marker-icon.low {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+/* 标记类型颜色 */
+.marker-icon.geopolitical { background: #ef4444; color: #fff; }
+.marker-icon.central-bank { background: #3b82f6; color: #fff; }
+.marker-icon.summit { background: #8b5cf6; color: #fff; }
+.marker-icon.political { background: #f59e0b; color: #fff; }
+.marker-icon.trade { background: #10b981; color: #fff; }
+
+/* Leaflet 弹出框样式 */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    padding: 0 !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    min-width: 200px;
+}
+
+.leaflet-popup-tip {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.map-popup {
+    padding: 12px 14px;
+}
+
+.map-popup-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 6px;
+}
+
+.map-popup-meta {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.map-popup-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.map-popup-type.geopolitical { background: #fef2f2; color: #dc2626; }
+.map-popup-type.central-bank { background: #eff6ff; color: #2563eb; }
+.map-popup-type.summit { background: #f5f3ff; color: #7c3aed; }
+.map-popup-type.political { background: #fffbeb; color: #d97706; }
+.map-popup-type.trade { background: #ecfdf5; color: #059669; }
+
+.map-popup-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.map-popup-btn:hover {
+    background: #2d4a6f;
+}
+
+/* ========================================
+   地图图例
+   ======================================== */
+.map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    margin-top: 14px;
+    box-shadow: var(--shadow-sm);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.legend-dot.political { background: var(--political-color); }
+.legend-dot.central-bank { background: var(--central-bank-color); }
+.legend-dot.summit { background: var(--summit-color); }
+.legend-dot.trade { background: var(--trade-color); }
+.legend-dot.geopolitical { background: var(--geopolitical-color); }
+
+.importance-indicator {
+    display: flex;
+    gap: 4px;
+}
+
+.importance-indicator .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.importance-indicator .dot.high { background: var(--danger-color); }
+.importance-indicator .dot.medium { background: var(--warning-color); }
+.importance-indicator .dot.low { background: var(--success-color); }
+
+/* ========================================
+   右侧时间轴面板
+   ======================================== */
+.timeline-panel {
+    width: var(--timeline-width);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    max-height: calc(100vh - var(--header-height) - 32px);
+    box-shadow: var(--shadow-md);
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 24px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary-color), var(--border-color));
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 16px;
+    cursor: pointer;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 3px solid var(--bg-secondary);
+    z-index: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.timeline-item.political::before { background: var(--political-color); }
+.timeline-item.central-bank::before { background: var(--central-bank-color); }
+.timeline-item.summit::before { background: var(--summit-color); }
+.timeline-item.trade::before { background: var(--trade-color); }
+.timeline-item.geopolitical::before {
+    background: var(--geopolitical-color);
+    animation: geo-pulse 1.5s infinite;
+}
+
+.timeline-date {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.timeline-content {
+    background: var(--bg-primary);
+    padding: 12px;
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.timeline-item:hover .timeline-content {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transform: translateX(4px);
+}
+
+.timeline-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.timeline-location {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.timeline-importance {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.timeline-importance.high { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+.timeline-importance.medium { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
+.timeline-importance.low { background: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+
+/* ========================================
+   重大事件列表模块
+   ======================================== */
+.major-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.major-event-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    gap: 10px;
+}
+
+.major-event-item:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-md);
+    transform: translateX(4px);
+}
+
+.major-event-item.high {
+    border-left-color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.major-event-item.high:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.major-event-item.medium {
+    border-left-color: var(--warning-color);
+}
+
+.major-event-date {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 70px;
+    flex-shrink: 0;
+}
+
+.major-event-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.major-event-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.major-event-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.major-event-location {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.importance-badge {
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.importance-badge.high {
+    color: var(--danger-color);
+}
+
+.importance-badge.medium {
+    color: var(--warning-color);
+}
+
+/* ========================================
+   重大事件地图标记
+   ======================================== */
+.major-event-marker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.major-event-marker:hover {
+    transform: scale(1.05);
+}
+
+.major-marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.major-marker-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.major-event-marker.high .major-marker-dot {
+    animation: marker-pulse 1.5s infinite;
+}
+
+@keyframes marker-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* 重大事件地图标记 */
+.major-event-marker-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, z-index 0s;
+    white-space: nowrap;
+    position: relative;
+    z-index: 100;
+}
+
+.major-event-marker-container:hover {
+    transform: scale(1.05) translateX(3px);
+    z-index: 9999 !important;
+    position: relative;
+}
+
+.major-marker-diamond {
+    width: 20px;
+    height: 20px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.diamond-icon {
+    transform: rotate(-45deg);
+    font-size: 10px;
+}
+
+.major-marker-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3px 8px;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+/* Leaflet 标记悬停置顶 */
+.leaflet-marker-icon:hover {
+    z-index: 9999 !important;
+}
+
+/* ========================================
+   弹窗样式
+   ======================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 40, 71, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    width: 95%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: translateY(30px) scale(0.95);
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0) scale(1);
+}
+
+.modal-header {
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.modal-event-type {
+    display: inline-block;
+    padding: 6px 14px;
+    color: white;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-event-type.political { background: var(--political-color); }
+.modal-event-type.central-bank { background: var(--central-bank-color); }
+.modal-event-type.summit { background: var(--summit-color); }
+.modal-event-type.trade { background: var(--trade-color); }
+.modal-event-type.geopolitical { background: var(--geopolitical-color); }
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.meta-icon {
+    font-size: 14px;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--bg-tertiary);
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--danger-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   子标签页样式
+   ======================================== */
+.modal-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 24px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    padding: 14px 20px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.5);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: white;
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.modal-section {
+    margin-bottom: 16px;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-section p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+
+.modal-section ul {
+    margin-left: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.6;
+    list-style: none;
+}
+
+.modal-section ul li {
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+}
+
+.modal-section ul li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.empty-hint {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: 6px;
+}
+
+/* ========================================
+   影响分析
+   ======================================== */
+.impact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.impact-item {
+    background: var(--bg-primary);
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+
+.impact-item:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+}
+
+.impact-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.impact-direction {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.impact-direction.up { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+.impact-direction.down { background: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+.impact-direction.neutral { background: rgba(100, 116, 139, 0.1); color: var(--text-secondary); }
+
+/* ========================================
+   历史时间轴
+   ======================================== */
+.history-timeline {
+    position: relative;
+    padding-left: 16px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.history-timeline::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.history-item {
+    position: relative;
+    padding-bottom: 10px;
+    padding-left: 12px;
+}
+
+.history-item::before {
+    content: '';
+    position: absolute;
+    left: -13px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 2px solid var(--bg-secondary);
+}
+
+.history-date {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 3px;
+}
+
+.history-content {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: 8px 10px;
+    border-radius: 6px;
+    line-height: 1.5;
+}
+
+/* ========================================
+   后续关注点
+   ======================================== */
+.future-dates {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.future-date-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+    border-radius: 6px;
+    border-left: 3px solid var(--warning-color);
+}
+
+.future-date-item .date {
+    font-weight: 600;
+    color: #92400e;
+    min-width: 70px;
+    font-size: 12px;
+}
+
+.future-date-item .event {
+    color: var(--text-primary);
+    font-size: 12px;
+}
+
+/* ========================================
+   地缘冲突专属模块
+   ======================================== */
+.geopolitical-section {
+    background: linear-gradient(135deg, rgba(254, 226, 226, 0.5) 0%, rgba(254, 202, 202, 0.3) 100%);
+    border: 2px solid rgba(220, 38, 38, 0.3);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 16px;
+}
+
+.geopolitical-section h3 {
+    color: var(--geopolitical-color);
+}
+
+.geopolitical-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.geo-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+}
+
+.status-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.status-value {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+
+.status-value.escalated { background: rgba(220, 38, 38, 0.15); color: var(--geopolitical-color); }
+.status-value.stable { background: rgba(245, 158, 11, 0.15); color: var(--warning-color); }
+.status-value.de-escalated { background: rgba(16, 185, 129, 0.15); color: var(--success-color); }
+
+.cfr-impact-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.cfr-impact-badge.critical {
+    background: #dc2626;
+    color: white;
+}
+
+.cfr-impact-badge.significant {
+    background: #f59e0b;
+    color: white;
+}
+
+.cfr-impact-badge.limited {
+    background: #6b7280;
+    color: white;
+}
+
+.geo-factors {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.factor-item {
+    background: white;
+    padding: 14px;
+    border-radius: 8px;
+}
+
+.factor-title {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.factor-item ul {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.factor-item li {
+    padding: 4px 0;
+}
+
+/* 分析性文字区域 */
+.geo-analysis {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.geo-analysis h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.analysis-content {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.analysis-content p {
+    margin-bottom: 10px;
+}
+
+.analysis-content p:last-child {
+    margin-bottom: 0;
+}
+
+.analysis-sources {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.analysis-sources a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.analysis-sources a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   新闻链接
+   ======================================== */
+.news-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.news-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--bg-primary);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.news-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateX(6px);
+}
+
+.news-link::before {
+    content: '🔗';
+    font-size: 16px;
+}
+
+.related-news {
+    padding: 16px;
+    background: var(--bg-primary);
+    border-radius: 10px;
+}
+
+/* ========================================
+   风险提示
+   ======================================== */
+.risk-warning {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+    border-radius: 8px;
+    border-left: 4px solid var(--warning-color);
+}
+
+.risk-warning p {
+    color: #92400e;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* ========================================
+   弹窗底部
+   ======================================== */
+.modal-footer {
+    padding: 18px 28px;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+}
+
+/* ========================================
+   响应式设计
+   ======================================== */
+@media (max-width: 1400px) {
+    .map-legend {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .main-content {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .filter-panel {
+        width: 220px;
+        padding: 12px;
+    }
+
+    .timeline-panel {
+        width: 260px;
+        padding: 12px;
+    }
+
+    .weekly-focus {
+        display: none;
+    }
+
+    .map-legend {
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .filter-panel,
+    .timeline-panel {
+        width: 100%;
+        max-height: none;
+        height: auto;
+    }
+
+    .filter-panel {
+        order: 3;
+    }
+
+    .map-container {
+        order: 1;
+        min-height: 400px;
+        height: 55vh;
+    }
+
+    .timeline-panel {
+        order: 2;
+        max-height: 280px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .header-right .update-time {
+        font-size: 11px;
+    }
+
+    .map-wrapper {
+        min-height: 350px;
+    }
+
+    .world-map {
+        min-height: 350px;
+    }
+
+    /* 经济日历面板移动端优化 */
+    .calendar-list {
+        max-height: 200px;
+    }
+
+    .calendar-item {
+        padding: 8px 10px;
+    }
+
+    /* 重大事件面板优化 */
+    .major-events-list {
+        max-height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: 50px;
+    }
+
+    .header {
+        padding: 8px 0;
+    }
+
+    .header-content {
+        padding: 0 12px;
+    }
+
+    .logo-text {
+        font-size: 13px;
+    }
+
+    .logo-icon {
+        font-size: 16px;
+    }
+
+    .header-right .update-time {
+        display: none;
+    }
+
+    .filter-panel {
+        padding: 12px;
+    }
+
+    .panel-title {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .map-header {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .map-title {
+        font-size: 14px;
+    }
+
+    .map-controls {
+        width: auto;
+        justify-content: flex-end;
+    }
+
+    .control-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .map-legend {
+        flex-wrap: wrap;
+        gap: 6px 12px;
+        padding: 10px 14px;
+    }
+
+    .legend-row {
+        flex-wrap: wrap;
+        gap: 4px 10px;
+    }
+
+    .legend-item {
+        font-size: 10px;
+    }
+
+    .legend-title {
+        font-size: 10px;
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .map-container {
+        min-height: 320px;
+        height: 50vh;
+    }
+
+    /* Leaflet 移动端优化 */
+    .leaflet-control-zoom a {
+        width: 32px !important;
+        height: 32px !important;
+        line-height: 32px !important;
+        font-size: 18px !important;
+    }
+
+    .leaflet-container {
+        font-size: 12px;
+    }
+
+    .custom-marker .marker-icon {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+
+    .custom-marker .marker-icon.high {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
+    }
+
+    /* 经济数据标签移动端优化 */
+    .econ-leaflet-label {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .econ-leaflet-label .region-name {
+        font-size: 11px;
+    }
+
+    /* 重大事件面板优化 */
+    .major-events-list {
+        max-height: 200px;
+    }
+
+    .major-event-item {
+        padding: 10px 12px;
+    }
+
+    .major-event-title {
+        font-size: 12px;
+    }
+
+    /* 经济日历优化 */
+    .calendar-item {
+        padding: 10px;
+    }
+
+    .calendar-item-title {
+        font-size: 11px;
+    }
+
+    .calendar-item-value {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --header-height: 46px;
+    }
+
+    .header {
+        padding: 6px 0;
+    }
+
+    .header-content {
+        padding: 0 10px;
+    }
+
+    .logo {
+        gap: 6px;
+    }
+
+    .logo-text {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .logo-icon {
+        font-size: 14px;
+    }
+
+    .main-content {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .filter-panel {
+        padding: 10px;
+    }
+
+    .panel-title {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .checkbox-item {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .map-container {
+        min-height: 280px;
+        height: 45vh;
+        border-radius: 8px;
+    }
+
+    .map-title {
+        font-size: 13px;
+    }
+
+    .map-controls {
+        gap: 4px;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+
+    /* 移动端底部固定图例按钮 */
+    .map-legend {
+        display: none;
+    }
+
+    .mobile-legend-btn {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: var(--shadow-lg);
+        z-index: 999;
+        cursor: pointer;
+    }
+
+    .timeline-panel {
+        max-height: 220px;
+        padding: 10px;
+    }
+
+    .timeline-item {
+        padding: 10px;
+    }
+
+    .timeline-date {
+        font-size: 10px;
+    }
+
+    .timeline-title {
+        font-size: 12px;
+    }
+
+    /* 弹窗移动端优化 */
+    .modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .modal-header {
+        padding: 12px 14px;
+    }
+
+    .modal-title {
+        font-size: 15px;
+    }
+
+    .modal-event-type {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+
+    .modal-meta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    .modal-meta .meta-item {
+        flex: 0 0 auto;
+    }
+
+    .modal-tabs {
+        overflow-x: auto;
+        padding: 0 10px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .modal-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .modal-body {
+        padding: 12px 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-section h3 {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .modal-section p {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .impact-grid,
+    .geo-factors {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .impact-item {
+        padding: 10px;
+    }
+
+    .impact-label {
+        font-size: 10px;
+    }
+
+    .impact-value {
+        font-size: 14px;
+    }
+
+    /* 地缘分析模块移动端 */
+    .geopolitical-section {
+        padding: 12px;
+    }
+
+    .geo-status {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .geo-factors {
+        padding: 10px 0;
+    }
+
+    /* Leaflet 弹窗移动端 */
+    .leaflet-popup-content {
+        min-width: 180px;
+        max-width: 220px;
+    }
+
+    .leaflet-popup-content-wrapper {
+        border-radius: 8px;
+    }
+
+    .map-popup {
+        padding: 10px 12px;
+    }
+
+    .map-popup-title {
+        font-size: 13px;
+    }
+
+    .map-popup-meta {
+        font-size: 11px;
+    }
+
+    .map-popup-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    /* 经济数据弹窗移动端优化 */
+    .economic-modal {
+        width: 100%;
+        height: auto;
+        max-height: 90vh;
+        border-radius: 16px 16px 0 0;
+        margin: auto 0 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .economic-detail-body {
+        padding: 12px;
+    }
+
+    .economic-values-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .economic-value-card {
+        padding: 12px 8px;
+    }
+
+    .economic-value-card .label {
+        font-size: 11px;
+    }
+
+    .economic-value-card .value {
+        font-size: 16px;
+    }
+
+    .economic-detail-section {
+        padding: 12px;
+    }
+
+    .economic-detail-title {
+        font-size: 13px;
+    }
+
+    .economic-description {
+        font-size: 12px;
+    }
+
+    /* 经济数据浏览器弹窗移动端优化 */
+    .econ-data-modal {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .econ-data-body {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .econ-control-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .econ-control-group {
+        width: 100%;
+    }
+
+    .econ-select {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .econ-chart-type-toggle {
+        display: flex;
+        justify-content: center;
+    }
+
+    .chart-type-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+
+    .econ-time-row {
+        flex-direction: column;
+    }
+
+    .econ-time-slider-group {
+        width: 100%;
+    }
+
+    .econ-quick-time {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .quick-time-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .econ-range-slider {
+        height: 24px;
+    }
+
+    .econ-indicator-list {
+        max-height: 150px;
+        padding: 8px;
+    }
+
+    .econ-indicator-item {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .econ-chart-container {
+        height: 220px;
+        min-height: 200px;
+    }
+
+    .econ-data-table-container {
+        max-height: 150px;
+    }
+
+    .econ-data-table {
+        font-size: 11px;
+    }
+
+    .econ-data-table th,
+    .econ-data-table td {
+        padding: 6px 8px;
+    }
+
+    .modal-footer {
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-secondary,
+    .btn-primary {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    /* 重大事件面板移动端优化 */
+    .major-event-item {
+        padding: 10px;
+    }
+
+    .major-event-header {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+    }
+
+    .major-event-date {
+        font-size: 10px;
+    }
+
+    .major-event-title {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .major-event-location {
+        font-size: 10px;
+    }
+
+    /* 经济日历移动端优化 */
+    .calendar-list {
+        max-height: 180px;
+    }
+
+    .calendar-item {
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+
+    .calendar-item-header {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        align-items: center;
+    }
+
+    .calendar-item-title {
+        font-size: 12px;
+        flex: 1;
+        min-width: 60%;
+    }
+
+    .calendar-item-value {
+        font-size: 14px;
+    }
+
+    .calendar-item-meta {
+        font-size: 10px;
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    .checkbox-item:hover,
+    .timeline-item:hover,
+    .calendar-item:hover,
+    .major-event-item:hover {
+        transform: none;
+        background: var(--bg-primary);
+    }
+
+    .control-btn:hover {
+        background: var(--bg-secondary);
+    }
+
+    .custom-marker:hover {
+        transform: none;
+    }
+
+    .tab-btn:hover {
+        background: var(--bg-tertiary);
+    }
+
+    /* 增大触摸目标 */
+    .checkbox-item,
+    .timeline-item,
+    .control-btn,
+    .tab-btn,
+    .calendar-item,
+    .major-event-item,
+    .econ-indicator-item,
+    .quick-time-btn {
+        min-height: 44px;
+    }
+
+    /* 按钮触摸优化 */
+    .btn-secondary,
+    .btn-primary {
+        min-height: 44px;
+    }
+
+    /* Leaflet控制按钮触摸优化 */
+    .leaflet-control-zoom a,
+    .leaflet-control-zoom a:hover {
+        width: 36px !important;
+        height: 36px !important;
+        line-height: 36px !important;
+    }
+
+    /* 禁用hover效果，使用active替代 */
+    .checkbox-item:active,
+    .timeline-item:active,
+    .calendar-item:active,
+    .major-event-item:active {
+        background: var(--bg-tertiary);
+        transform: scale(0.98);
+    }
+
+    .control-btn:active,
+    .tab-btn:active {
+        background: var(--bg-tertiary);
+        transform: scale(0.95);
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-width: 896px) and (orientation: landscape) {
+    :root {
+        --header-height: 44px;
+    }
+
+    .header {
+        padding: 4px 0;
+    }
+
+    .logo-text {
+        font-size: 12px;
+    }
+
+    .logo-icon {
+        font-size: 14px;
+    }
+
+    .main-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .map-container {
+        width: 100%;
+        height: 55vh;
+        order: 1;
+        min-height: 200px;
+    }
+
+    .filter-panel,
+    .timeline-panel {
+        width: calc(50% - 3px);
+        order: 2;
+        max-height: 35vh;
+    }
+
+    .map-legend {
+        display: none;
+    }
+
+    /* 弹窗横屏优化 */
+    .modal {
+        max-height: 95vh;
+        margin: 2vh auto;
+    }
+
+    .modal-body {
+        max-height: calc(95vh - 140px);
+    }
+}
+
+/* 超小屏幕（如iPhone SE）优化 */
+@media (max-width: 375px) {
+    :root {
+        --header-height: 42px;
+    }
+
+    .logo-text {
+        font-size: 11px;
+    }
+
+    .logo-icon {
+        font-size: 12px;
+    }
+
+    .map-container {
+        min-height: 240px;
+        height: 40vh;
+    }
+
+    .map-title {
+        font-size: 12px;
+    }
+
+    .control-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .panel-title {
+        font-size: 11px;
+    }
+
+    .timeline-panel {
+        max-height: 180px;
+    }
+
+    .calendar-list {
+        max-height: 150px;
+    }
+
+    .major-events-list {
+        max-height: 160px;
+    }
+}
+
+/* 安全区域适配（iPhone X及以上） */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .modal {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .modal-footer {
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .main-content {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+}
+
+/* ========================================
+   滚动条美化
+   ======================================== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ========================================
+   CFR风格地图标记
+   ======================================== */
+.cfr-marker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.cfr-marker:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.cfr-marker .marker-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cfr-marker.critical .marker-dot {
+    background: #dc2626;
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.5);
+}
+
+.cfr-marker.significant .marker-dot {
+    background: #f59e0b;
+}
+
+.cfr-marker.limited .marker-dot {
+    background: #10b981;
+}
+
+.cfr-marker .marker-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1e293b;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cfr-marker .marker-status {
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.cfr-marker.critical .marker-status {
+    color: #dc2626;
+}
+
+.cfr-marker.significant .marker-status {
+    color: #f59e0b;
+}
+
+.cfr-marker.limited .marker-status {
+    color: #10b981;
+}
+
+/* 圆点标记样式 - 用于Significant和Limited级别 */
+.cfr-dot-marker {
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.cfr-dot-marker:hover {
+    transform: scale(1.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.cfr-dot-marker.significant {
+    background: #f59e0b;
+}
+
+.cfr-dot-marker.limited {
+    background: #10b981;
+}
+
+/* 地图图例更新 */
+.map-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.legend-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-right: 8px;
+}
+
+.map-legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #475569;
+}
+
+.map-legend .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+
+.map-legend .legend-dot.critical {
+    background: #dc2626;
+}
+
+.map-legend .legend-dot.significant {
+    background: #f59e0b;
+}
+
+.map-legend .legend-dot.limited {
+    background: #10b981;
+}
+
+.legend-diamond {
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+
+.legend-diamond.political {
+    background: #8b5cf6;
+}
+
+.legend-diamond.diplomatic {
+    background: #10b981;
+}
+
+.legend-diamond.financial {
+    background: #ef4444;
+}
+
+.legend-diamond.economic {
+    background: #f59e0b;
+}
+
+/* ========================================
+   提示消息动画
+   ======================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+}
+
+.toast-message {
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   相关报道样式
+   ======================================== */
+.related-news-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+}
+
+.related-news-item:hover {
+    background: var(--bg-secondary);
+    transform: translateX(4px);
+}
+
+.related-news-item .news-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.related-news-item .news-title {
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.related-news-item .news-source {
+    font-size: 11px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* ========================================
+   经济数据区域图例
+   ======================================== */
+.legend-region {
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.legend-region.us {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0.6) 100%);
+    border: 2px solid #3b82f6;
+}
+
+/* ========================================
+   地图经济数据区域高亮
+   ======================================== */
+.econ-region-marker {
+    position: absolute;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+.econ-region-marker:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.econ-region-marker.us {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.4) 100%);
+    border: 2px solid rgba(59, 130, 246, 0.6);
+}
+
+.econ-region-marker.eurozone {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.4) 100%);
+    border: 2px solid rgba(16, 185, 129, 0.6);
+}
+
+.econ-region-marker.uk {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.4) 100%);
+    border: 2px solid rgba(139, 92, 246, 0.6);
+}
+
+.econ-region-marker.japan {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.4) 100%);
+    border: 2px solid rgba(239, 68, 68, 0.6);
+}
+
+.econ-region-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    white-space: nowrap;
+}
+
+.econ-region-hint {
+    font-size: 9px;
+    color: var(--text-secondary);
+    display: block;
+    text-align: center;
+}
+
+/* Leaflet 经济数据区域样式 */
+.econ-leaflet-region {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.econ-leaflet-region:hover {
+    filter: brightness(1.1);
+}
+
+/* 经济数据区域标签 - 半透明 + 彩色背景 */
+.econ-leaflet-label {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(4px);
+    padding: 6px 10px 4px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    border: 2px solid;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+.econ-leaflet-label:hover {
+    background: rgba(255,255,255,0.92);
+    transform: scale(1.05);
+}
+
+/* 美国 - 蓝色 */
+.econ-leaflet-label.us {
+    border-color: rgba(59, 130, 246, 0.7);
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.econ-leaflet-label.us .region-name {
+    color: #1d4ed8;
+}
+
+/* 欧元区 - 绿色 */
+.econ-leaflet-label.eurozone {
+    border-color: rgba(16, 185, 129, 0.7);
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.econ-leaflet-label.eurozone .region-name {
+    color: #047857;
+}
+
+/* 英国 - 紫色 */
+.econ-leaflet-label.uk {
+    border-color: rgba(139, 92, 246, 0.7);
+    background: rgba(139, 92, 246, 0.15);
+}
+
+.econ-leaflet-label.uk .region-name {
+    color: #6d28d9;
+}
+
+/* 日本 - 红色 */
+.econ-leaflet-label.japan {
+    border-color: rgba(239, 68, 68, 0.7);
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.econ-leaflet-label.japan .region-name {
+    color: #b91c1c;
+}
+
+.econ-leaflet-label .region-name {
+    font-size: 12px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 1px;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+}
+
+.econ-leaflet-label .region-hint {
+    font-size: 9px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ========================================
+   经济数据浏览器弹窗
+   ======================================== */
+.econ-data-modal {
+    width: 98%;
+    max-width: 1400px;
+    max-height: 95vh;
+    height: 90vh;
+}
+
+.econ-data-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: calc(90vh - 100px);
+    overflow-y: auto;
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 控制面板 */
+.econ-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.econ-control-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.econ-control-group {
+    flex: 1;
+    min-width: 120px;
+}
+
+.econ-control-group.econ-full-width {
+    flex: 100%;
+    min-width: 100%;
+}
+
+.econ-control-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.econ-select {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.econ-select:hover {
+    border-color: var(--primary-color);
+}
+
+.econ-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.1);
+}
+
+/* 日期选择器 */
+.econ-date-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.econ-date-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.1);
+}
+
+/* 时间范围滑块 */
+.econ-time-row {
+    align-items: flex-end;
+}
+
+.econ-time-slider-group {
+    flex: 2;
+    min-width: 250px;
+}
+
+.econ-quick-group {
+    flex: 1;
+    min-width: 180px;
+}
+
+.econ-time-slider-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#econTimeDisplay {
+    font-weight: 500;
+    color: var(--primary-color);
+    font-size: 12px;
+}
+
+.econ-range-slider-container {
+    position: relative;
+    height: 28px;
+    margin-top: 4px;
+}
+
+.econ-range-slider {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.econ-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    pointer-events: auto;
+    border: 3px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease;
+}
+
+.econ-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+.econ-range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    pointer-events: auto;
+    border: 3px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.econ-slider-track {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: 10px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    z-index: 1;
+}
+
+.econ-slider-range {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    border-radius: 3px;
+}
+
+/* 快捷时间选择 */
+.econ-quick-time {
+    display: flex;
+    gap: 4px;
+}
+
+.quick-time-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 11px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-time-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.quick-time-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* 图表类型切换 */
+.econ-chart-type-toggle {
+    display: flex;
+    gap: 4px;
+}
+
+.chart-type-btn {
+    padding: 5px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 11px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-type-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.chart-type-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* 指标列表 */
+.econ-indicator-list {
+    max-height: 80px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 6px;
+    background: var(--bg-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+    align-content: flex-start;
+}
+
+.econ-indicator-item {
+    display: flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--bg-primary);
+    font-size: 11px;
+    border: 1px solid transparent;
+}
+
+.econ-indicator-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.econ-indicator-item.selected {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.25);
+}
+
+.econ-indicator-item input[type="checkbox"] {
+    margin-right: 5px;
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.econ-indicator-name {
+    font-size: 11px;
+    color: var(--text-primary);
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.econ-indicator-category {
+    font-size: 9px;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin-left: 5px;
+}
+
+/* 图表区域 */
+.econ-chart-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    flex: 1;
+    min-height: 350px;
+}
+
+#econChart {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 320px;
+}
+
+/* 数据表格 */
+.econ-data-table-container {
+    max-height: 180px;
+    overflow: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.econ-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.econ-data-table th {
+    background: var(--bg-primary);
+    padding: 6px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.econ-data-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.econ-data-table tr:hover td {
+    background: var(--bg-primary);
+}
+
+.econ-data-table .date-col {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.econ-data-table .value-col {
+    font-family: 'SF Mono', 'Monaco', monospace;
+    text-align: right;
+}
+
+/* ========================================
+   经济数据弹窗类型标签
+   ======================================== */
+.modal-event-type.economic-data {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+/* ========================================
+   地图经济区域标签 - 不同颜色
+   ======================================== */
+.econ-leaflet-label {
+    background: rgba(255,255,255,0.95);
+    padding: 8px 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    border-left: 4px solid #3b82f6;
+}
+
+.econ-leaflet-label.us {
+    border-left-color: #3b82f6;
+}
+
+.econ-leaflet-label.eurozone {
+    border-left-color: #10b981;
+}
+
+.econ-leaflet-label.uk {
+    border-left-color: #8b5cf6;
+}
+
+.econ-leaflet-label.japan {
+    border-left-color: #ef4444;
+}
+
+.econ-leaflet-label .region-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.econ-leaflet-label .region-hint {
+    font-size: 10px;
+    color: var(--primary-color);
+}
+
+/* ========================================
+   移动端图例按钮和弹窗
+   ======================================== */
+.mobile-legend-btn {
+    display: none;
+}
+
+.mobile-legend-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.mobile-legend-modal {
+    background: var(--bg-secondary);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px 16px 0 0;
+    max-height: 70vh;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.mobile-legend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-primary);
+}
+
+.mobile-legend-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.mobile-legend-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    font-size: 20px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-legend-close:active {
+    background: var(--bg-tertiary);
+}
+
+.mobile-legend-content {
+    padding: 16px 20px;
+    overflow-y: auto;
+    max-height: calc(70vh - 60px);
+    /* 移动端平滑滚动 */
+    -webkit-overflow-scrolling: touch;
+}
+
+.mobile-legend-section {
+    margin-bottom: 20px;
+}
+
+.mobile-legend-section:last-child {
+    margin-bottom: 0;
+}
+
+.mobile-legend-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-legend-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.mobile-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.mobile-legend-item .legend-dot,
+.mobile-legend-item .legend-diamond {
+    flex-shrink: 0;
+}
+
+.mobile-econ-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.mobile-econ-color.us {
+    background: #3b82f6;
+}
+
+.mobile-econ-color.eurozone {
+    background: #10b981;
+}
+
+.mobile-econ-color.uk {
+    background: #8b5cf6;
+}
+
+.mobile-econ-color.japan {
+    background: #ef4444;
+}
+
+/* 在小屏幕显示图例按钮 */
+@media (max-width: 576px) {
+    .mobile-legend-btn {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-legend-btn {
+        display: flex;
+    }
+}
